@@ -1,8 +1,19 @@
+import matplotlib.pylab as pylab
 import matplotlib as mpl
 mpl.use('Svg')  
 import numpy as np
 import matplotlib.pyplot as plt
 import ruptures as rpt
+plt.style.use('tableau-colorblind10')
+
+
+params = {'legend.fontsize': 'xx-large',
+         'axes.labelsize': 'xx-large',
+          'axes.titlesize':'xx-large',
+          'xtick.labelsize':'xx-large',
+          'ytick.labelsize':'xx-large'}
+
+pylab.rcParams.update(params) 
 
 from ctapipe.io import EventSource
 from ctapipe.utils import get_dataset_path
@@ -27,8 +38,6 @@ for i in np.arange(5):
     teldata = event.r0.tel[5]
 
 
-
-
     # generate signal                                      
     n_samples, dim, sigma = 1000, 3, 4
     n_bkps = 4#number of breakpoints, points where signal changes its beh
@@ -42,8 +51,14 @@ for i in np.arange(5):
         algo = rpt.Pelt(model="l2").fit(teldata.waveform[0,0,:])
         result = algo.predict(pen=8)
         print(result)
-        
-        #print(result) #This line prints the detected change points.                 
-    # display                                                                                            
+
+    # display                              
         rpt.display(teldata.waveform[0,0,:], result)
-        plt.savefig('Waveforml2pen8'+str(i)+'.png')
+
+        
+    plt.xlabel("Sample")
+    plt.ylabel("Amplitude\n [p.e.]")
+
+    
+    plt.tight_layout()
+    plt.savefig('Waveforml2pen8'+str(i)+'.png')
