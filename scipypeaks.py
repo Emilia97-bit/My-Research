@@ -1,0 +1,77 @@
+import matplotlib.pylab as pylab
+import numpy as np
+import matplotlib
+import sys, os
+matplotlib.use('Svg')
+from matplotlib import pyplot as plt
+from scipy import signal
+from scipy.datasets import electrocardiogram
+from scipy.signal import find_peaks
+plt.style.use('tableau-colorblind10')
+
+
+params = {'legend.fontsize': 'xx-large',
+         'axes.labelsize': 'xx-large',
+          'axes.titlesize':'xx-large',
+          'xtick.labelsize':'xx-large',
+          'ytick.labelsize':'xx-large'}
+
+from ctapipe.io import EventSource
+from ctapipe.utils import get_dataset_path
+from ctapipe.visualization import CameraDisplay
+
+x = electrocardiogram()[2000:4000]
+
+#particle = 'Gamma'
+#particle = sys.argv[0]
+
+particle = "Proton"
+
+if particle=="Gamma":
+    #source = EventSource("/lfs/l7/hess/users/steinmassl/MC_phase2d3_production/Diffuse_benedetta_new/ref0.79/"+particle+"/20deg/0deg/0.0deg/Data/gamma_20deg_0deg_run21410___phase2d_simon3_desert-all_tel-_mix_atm_new_trig_thresh-sims-realnsb_benedettanew0903_cone5.simhess.gz",focal_length_choice='EQUIVALENT')
+
+    source = EventSource("/lfs/l7/hess/users/steinmassl/MC_phase2d3_production/Diffuse_benedetta_new/ref0.79/Gamma/20deg/0deg/0.0deg/Data/gamma_20deg_0deg_run21\
+410___phase2d_simon3_desert-all_tel-_mix_atm_new_trig_thresh-sims-realnsb_benedettanew0903_cone5.simhess.gz",focal_length_choice='EQUIVALENT')
+    
+if particle=="Proton":
+    source = EventSource("/lfs/l7/hess/users/steinmassl/MC_phase2d3_production/Diffuse_benedetta_new/ref0.79/Proton/20deg/0deg/0.0deg/Data/proton_20deg_0deg_run21610___phase2d_simon3_desert-all_tel-_mix_atm_new_trig_thresh-sims-realnsb_benedettanew0903.simhess.gz",focal_length_choice='EQUIVALENT')
+
+
+print(source)
+event_iterator = iter(source)
+
+for i in np.arange(10):
+    event = next(event_iterator)
+
+    teldata = event.r0.tel[5]
+    fig=plt.figure(figsize=(10,10))
+
+    if teldata.waveform is not None:
+        peaks, _ = find_peaks(x, distance=None)
+
+        np.diff(peaks)
+        #differences = np.diff(peaks)
+#xarray([186, 180, 177, 171, 177, 169, 167, 164, 158, 162, 172])
+t = [1, 2, 3, 4, 5, 6]
+z = [0.5, 1.5, 2, 2.5, 3, 3.2]
+#plt.plot(x)        
+#plt.plot(peaks, x[peaks], "x")
+plt.plot(t,z)
+plt.savefig(particle+'/'+'test.png')
+#plt.savefig(particle+'/'+str(i)+'.png')
+
+#plt.show()
+
+
+
+
+        #print(np.shape(teldata.waveform))                                      
+        #for j in range(1764):
+            #print(teldata.waveform[0,j,:])                                     
+            #plt.plot(teldata.waveform[0,j,:],alpha=0.5)
+
+    #plt.xlabel("Sample")
+    #plt.ylabel("Amplitude [p.e.]")
+
+    #plt.tight_layout()
+#plt.savefig(particle+'/'+str(i)+'.png')
