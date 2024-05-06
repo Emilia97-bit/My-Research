@@ -22,7 +22,7 @@ from ctapipe.visualization import CameraDisplay
 
 
 
-particle = "Gamma"
+particle ="Gamma"
 
 if particle=="Gamma":
     source = EventSource("/lfs/l7/hess/users/steinmassl/MC_phase2d3_production/Diffuse_benedetta_new/ref0.79/"+particle+"/20deg/0deg/0.0deg/Data/gamma_20deg_0deg_run21410___phase2d_simon3_desert-all_tel-_mix_atm_new_trig_thresh-sims-realnsb_benedettanew0903_cone5.simhess.gz",focal_length_choice='EQUIVALENT')
@@ -51,7 +51,7 @@ for event in event_iterator:
             waveform_normalized = waveform / np.max(waveform)
 
             # Applying peak findings
-            peaks, _ = find_peaks(waveform_normalized, distance=150)
+            peaks, _ = find_peaks(waveform_normalized, distance=None)
 
             # Counting the number of changes and adding to the total                        
             total_changes += len(peaks)
@@ -62,4 +62,4 @@ np.save('proton.npy',np.asarray(num_changes_per_event))
     
 plt.plot(waveform_normalized)
 plt.plot(peaks, waveform_normalized[peaks], "x")
-plt.savefig(particle)#+'/'+str(i)+'.png') 
+plt.savefig('Gamma.png') #+'/'+str(i)+'.png') 
